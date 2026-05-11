@@ -1,0 +1,3 @@
+Feature	REST	GraphQL
+Endpoints	Multiple	Single
+Data Fetching	Fixed response	Client chooses

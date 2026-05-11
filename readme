@@ -1,0 +1,2 @@
+package.json defines project dependencies and configurations, while package-lock.json locks the exact installed dependency versions to ensure consistent installations across environments.
+

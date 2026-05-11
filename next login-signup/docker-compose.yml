@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: next-auth-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: authdb
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - next-auth-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  next-auth-network:
+    driver: bridge

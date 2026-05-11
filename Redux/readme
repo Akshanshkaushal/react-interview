@@ -1,0 +1,87 @@
+// src/
+//  ├── app/
+//  │    └── store.js
+//  │
+//  ├── features/
+//  │    └── counter/
+//  │          └── counterSlice.js
+//  │
+//  ├── App.js
+//  └── main.js 
+
+// SLICE
+const counterSlice = createSlice({
+
+  name: "counter",
+
+  initialState: {
+    value: 0
+  },
+
+  reducers: {
+
+    increment: (state) => {
+      state.value++;
+    }
+  }
+});
+
+
+// STORE
+const store = configureStore({
+
+  reducer: {
+    counter: counterSlice.reducer
+  }
+});
+
+
+// PROVIDER
+<Provider store={store}>
+   <App />
+</Provider>
+
+
+// READ STATE
+const count = useSelector(
+  state => state.counter.value
+); 
+
+// UPDATE STATE
+dispatch(increment());
+
+
+////////////////////////////////////////////////////////////
+/* 
+Store	Global state container
+Slice	One feature's state + logic
+State	Actual data
+Reducer	Function updating state
+Action	What happened
+Dispatch	Send action
+Provider	Gives store access to app
+useSelector	Read Redux state
+useDispatch	Update Redux state*/
+
+// One Central Store
+//        ↓
+// All Components Read From It
+//        ↓
+// Updates Happen Predictably
+
+// Component
+//    ↓ dispatch(action)
+// Reducer
+//    ↓
+// Store Updated
+//    ↓
+// UI Re-renders
+
+// | Feature             | Benefit                       |
+// | ------------------- | ----------------------------- |
+// | Central Store       | All global state in one place |
+// | Predictable updates | Easier debugging              |
+// | Reducers            | Organized logic               |
+// | DevTools            | Time travel debugging         |
+// | Middleware          | Async API handling            |
+// | Scalable            | Large apps                    |
