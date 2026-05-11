@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 function Modal({ isOpen, onClose, children }) {
   // ESC close
   useEffect(() => {
+
     const handleEsc = (e) => {
       if (e.key === "Escape") {
         onClose();
@@ -12,10 +13,12 @@ function Modal({ isOpen, onClose, children }) {
     };
 
     document.addEventListener("keydown", handleEsc);
-
+    
+    //cleanup
     return () => {
       document.removeEventListener("keydown", handleEsc);
     };
+
   }, [onClose]);
 
   // Conditional rendering

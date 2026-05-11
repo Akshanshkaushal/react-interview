@@ -1,9 +1,10 @@
 // Step 8: Create SignupForm component
 // Similar to LoginForm, but with additional fields and validation.
-// Include password confirmation check.
+// Include password confirmation check and API call with headers.
 
 import { useState } from 'react';
-import { signup } from '../services/authApi.js';
+
+const API_BASE_URL = 'http://localhost:3000/api'; // Adjust to your API endpoint
 
 export default function SignupForm({ onSuccess }) {
   // Step 9: Define state for all form inputs
@@ -14,7 +15,7 @@ export default function SignupForm({ onSuccess }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Step 10: Handle form submission with validation
+  // Step 10: Handle form submission with validation and API call
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,12 +28,22 @@ export default function SignupForm({ onSuccess }) {
     }
 
     try {
-      const response = await signup({ name, email, password });
+      const response = await fetch(`${API_BASE_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          // Add other headers if needed
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-      if (response.success) {
-        onSuccess(response.user);
+      const data = await response.json();
+
+      if (response.ok) {
+        onSuccess(data.user);
       } else {
-        setError(response.message);
+        setError(data.message || 'Signup failed');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');

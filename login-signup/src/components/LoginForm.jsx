@@ -1,10 +1,11 @@
 // Step 4: Create LoginForm component
 // In an interview, after the mock API, build the login form.
 // Use useState for form fields and loading/error states.
-// Handle form submission with async/await.
+// Handle form submission with async/await and API call with headers.
 
 import { useState } from 'react';
-import { login } from '../services/authApi.js';
+
+const API_BASE_URL = 'http://localhost:3000/api'; // Adjust to your API endpoint
 
 export default function LoginForm({ onSuccess }) {
   // Step 5: Define state for form inputs and UI feedback
@@ -14,19 +15,29 @@ export default function LoginForm({ onSuccess }) {
   const [loading, setLoading] = useState(false);
 
   // Step 6: Handle form submission
-  // Prevent default, set loading, call API, handle response
+  // Prevent default, set loading, call API with headers, handle response
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      const response = await login({ email, password });
+      const response = await fetch(`${API_BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          // Add other headers if needed, e.g., 'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      if (response.success) {
-        onSuccess(response.user); // Notify parent component
+      const data = await response.json();
+
+      if (response.ok) {
+        onSuccess(data.user); // Notify parent component
       } else {
-        setError(response.message);
+        setError(data.message || 'Login failed');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
